@@ -3,6 +3,7 @@ Imports System.IO
 Imports System.Globalization
 Imports System.Xml
 Imports System.Xml.Schema
+Imports System.Reflection
 
 Namespace PCAxis.Paxiom.Localization
 
@@ -107,7 +108,8 @@ Namespace PCAxis.Paxiom.Localization
                     file.Close()
                     _validXML = True
 
-                    Using s As New StringReader(My.Resources.LanguageSchema)
+                    Dim assembly As Assembly = GetType(PxResourceReader).GetTypeInfo().Assembly
+                    Using s As Stream = assembly.GetManifestResourceStream("LanguageSchema.xsd")
                         eventHandler = New ValidationEventHandler(AddressOf ValidationEventHandler)
 
                         schema = XmlSchema.Read(s, eventHandler)
