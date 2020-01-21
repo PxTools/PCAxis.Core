@@ -4,6 +4,7 @@ Imports System.Reflection
 Imports PCAxis.Paxiom.Localization
 Imports PCAxis.Paxiom.ClassAttributes
 'Imports System.Windows.Forms
+Imports Microsoft.VisualBasic
 
 Namespace PCAxis.Paxiom
 

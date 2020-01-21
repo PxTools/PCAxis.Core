@@ -1,4 +1,5 @@
-﻿Namespace PCAxis.Paxiom
+﻿Imports Microsoft.VisualBasic
+Namespace PCAxis.Paxiom
 
     Public Class DataFormatter
 
@@ -541,14 +542,14 @@
             If ShowDataNotes Then
                 Dim dataNote As String = ""
                 If Not _dataNotePlacement = DataNotePlacementType.None Then
-                        If _model.Data.UseDataCellMatrix AndAlso _model.Data.DataCellMatrixIsFilled Then
-                            dataNote = _model.Data.ReadDataCellNoteElement(row, column)
-                        Else
-                            dataNote = GetDataNote()
-                        End If
+                    If _model.Data.UseDataCellMatrix AndAlso _model.Data.DataCellMatrixIsFilled Then
+                        dataNote = _model.Data.ReadDataCellNoteElement(row, column)
+                    Else
+                        dataNote = GetDataNote()
                     End If
-                    'Adds the datanote
-                    Select Case _dataNotePlacement
+                End If
+                'Adds the datanote
+                Select Case _dataNotePlacement
                     Case DataNotePlacementType.After
                         data = data & dataNote
                     Case DataNotePlacementType.Before
@@ -615,13 +616,13 @@
 
                 Dim dataNote As String = ""
 
-                    If Not _dataNotePlacement = DataNotePlacementType.None Then
-                        If _model.Data.UseDataCellMatrix AndAlso _model.Data.DataCellMatrixIsFilled Then
-                            dataNote = _model.Data.ReadDataCellNoteElement(row, column)
-                        Else
-                            dataNote = GetDataNote()
-                        End If
+                If Not _dataNotePlacement = DataNotePlacementType.None Then
+                    If _model.Data.UseDataCellMatrix AndAlso _model.Data.DataCellMatrixIsFilled Then
+                        dataNote = _model.Data.ReadDataCellNoteElement(row, column)
+                    Else
+                        dataNote = GetDataNote()
                     End If
+                End If
 
                 'Adds the datanote
                 Select Case _dataNotePlacement
