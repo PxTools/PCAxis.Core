@@ -141,19 +141,19 @@ Namespace PCAxis.Paxiom.Localization
         ''' <param name="language">The language to be loaded</param>
         ''' <returns>True if the language were succesfully loaded otherwise False.</returns>
         ''' <remarks>This function is used to explicitly load a language into the resource manager.</remarks>
-        Public Function LoadLanguage(ByVal language As Language) As Boolean
-            Try
-                Dim culture As New CultureInfo(language.Name)
-                Dim rs As PxResourceSet = Nothing
+        'Public Function LoadLanguage(ByVal language As Language) As Boolean
+        '    Try
+        '        Dim culture As New CultureInfo(language.Name)
+        '        Dim rs As PxResourceSet = Nothing
 
-                rs = CType(InternalGetResourceSet(culture, True, True), PxResourceSet)
-                rs.LoadLanguage(language)
+        '        rs = CType(InternalGetResourceSet(culture, True, True), PxResourceSet)
+        '        rs.LoadLanguage(language)
 
-                Return True
-            Catch ex As Exception
-                Return False
-            End Try
-        End Function
+        '        Return True
+        '    Catch ex As Exception
+        '        Return False
+        '    End Try
+        'End Function
 
         ''' <summary>
         ''' Returns a sentece

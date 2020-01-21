@@ -43,21 +43,21 @@ Namespace PCAxis.Paxiom.Localization
         ''' This function is used to explicitly load a language into the resourceset.
         ''' Existing entries in the resourceset will be replaced and new ones will be added.
         ''' </remarks>
-        Public Function LoadLanguage(ByVal language As Language) As Boolean
-            Try
-                For Each sentence As Sentence In language
-                    If Me.Table.Contains(sentence.Name) Then
-                        Me.Table(sentence.Name) = sentence.Value
-                    Else
-                        Me.Table.Add(sentence.Name, sentence.Value)
-                    End If
-                Next
+        'Public Function LoadLanguage(ByVal language As Language) As Boolean
+        '    Try
+        '        For Each sentence As Sentence In language
+        '            If Me.Table.Contains(sentence.Name) Then
+        '                Me.Table(sentence.Name) = sentence.Value
+        '            Else
+        '                Me.Table.Add(sentence.Name, sentence.Value)
+        '            End If
+        '        Next
 
-                Return True
-            Catch ex As Exception
-                Return False
-            End Try
-        End Function
+        '        Return True
+        '    Catch ex As Exception
+        '        Return False
+        '    End Try
+        'End Function
 
     End Class
 End Namespace
