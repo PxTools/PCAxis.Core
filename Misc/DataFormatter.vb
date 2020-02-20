@@ -1,5 +1,4 @@
-﻿Imports Microsoft.VisualBasic
-Namespace PCAxis.Paxiom
+﻿Namespace PCAxis.Paxiom
 
     Public Class DataFormatter
 
@@ -456,21 +455,21 @@ Namespace PCAxis.Paxiom
 
             Dim prec As Integer
             Dim variableCode As String
-            Dim valueCode As String
-            If _indexer.HeadingIndecies IsNot Nothing Then
-                prec = _defaultNumberFormat.NumberDecimalDigits
-                For i As Integer = 0 To _indexer.HeadingIndecies.Length - 1
-                    variableCode = _model.Meta.Heading(i).Code
-                    If _subPrecisions.ContainsKey(variableCode) Then
-                        valueCode = _model.Meta.Heading(i).Values(_indexer.HeadingIndecies(i)).Code
-                        If _subPrecisions(variableCode).ContainsKey(valueCode) Then
-                            prec = Math.Max(prec, _subPrecisions(variableCode)(valueCode))
-                        End If
-                    End If
-                Next
-            End If
+			Dim valueCode As String
+			prec = _defaultNumberFormat.NumberDecimalDigits
+			If _indexer.HeadingIndecies IsNot Nothing Then
+				For i As Integer = 0 To _indexer.HeadingIndecies.Length - 1
+					variableCode = _model.Meta.Heading(i).Code
+					If _subPrecisions.ContainsKey(variableCode) Then
+						valueCode = _model.Meta.Heading(i).Values(_indexer.HeadingIndecies(i)).Code
+						If _subPrecisions(variableCode).ContainsKey(valueCode) Then
+							prec = Math.Max(prec, _subPrecisions(variableCode)(valueCode))
+						End If
+					End If
+				Next
+			End If
 
-            If _indexer.StubIndecies IsNot Nothing Then
+			If _indexer.StubIndecies IsNot Nothing Then
                 For i As Integer = 0 To _indexer.StubIndecies.Length - 1
                     variableCode = _model.Meta.Stub(i).Code
                     If _subPrecisions.ContainsKey(variableCode) Then
@@ -542,14 +541,14 @@ Namespace PCAxis.Paxiom
             If ShowDataNotes Then
                 Dim dataNote As String = ""
                 If Not _dataNotePlacement = DataNotePlacementType.None Then
-                    If _model.Data.UseDataCellMatrix AndAlso _model.Data.DataCellMatrixIsFilled Then
-                        dataNote = _model.Data.ReadDataCellNoteElement(row, column)
-                    Else
-                        dataNote = GetDataNote()
+                        If _model.Data.UseDataCellMatrix AndAlso _model.Data.DataCellMatrixIsFilled Then
+                            dataNote = _model.Data.ReadDataCellNoteElement(row, column)
+                        Else
+                            dataNote = GetDataNote()
+                        End If
                     End If
-                End If
-                'Adds the datanote
-                Select Case _dataNotePlacement
+                    'Adds the datanote
+                    Select Case _dataNotePlacement
                     Case DataNotePlacementType.After
                         data = data & dataNote
                     Case DataNotePlacementType.Before
@@ -616,13 +615,13 @@ Namespace PCAxis.Paxiom
 
                 Dim dataNote As String = ""
 
-                If Not _dataNotePlacement = DataNotePlacementType.None Then
-                    If _model.Data.UseDataCellMatrix AndAlso _model.Data.DataCellMatrixIsFilled Then
-                        dataNote = _model.Data.ReadDataCellNoteElement(row, column)
-                    Else
-                        dataNote = GetDataNote()
+                    If Not _dataNotePlacement = DataNotePlacementType.None Then
+                        If _model.Data.UseDataCellMatrix AndAlso _model.Data.DataCellMatrixIsFilled Then
+                            dataNote = _model.Data.ReadDataCellNoteElement(row, column)
+                        Else
+                            dataNote = GetDataNote()
+                        End If
                     End If
-                End If
 
                 'Adds the datanote
                 Select Case _dataNotePlacement
