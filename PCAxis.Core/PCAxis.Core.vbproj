@@ -6,7 +6,7 @@
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0-beta4</Version>
+    <Version>1.0.0-beta5</Version>
     <Description>Core library for the PX platform</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/statisticssweden/PCAxis.Core</PackageProjectUrl>
