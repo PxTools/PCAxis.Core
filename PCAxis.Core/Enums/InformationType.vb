@@ -1,8 +1,8 @@
 ﻿Namespace PCAxis.Enums
     Public Enum InformationType
+        Contact
         OfficialStatistics
         LastUpdated
-        Contact
         Unit
         RefPeriod
         StockFa
