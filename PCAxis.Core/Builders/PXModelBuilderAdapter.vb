@@ -993,7 +993,7 @@ Namespace PCAxis.Paxiom
                 If meta.ContentInfo Is Nothing Then
                     meta.ContentInfo = New ContInfo(m_model.Meta.NumberOfLanguages - 1)
                 End If
-                meta.ContentInfo.SetProperty(key, value)
+                meta.ContentInfo.SetProperty(key, value, m_model.Meta.GetLanguageIndex(m_selectedLanguage))
                 'If key = PXKeywords.UNITS Then
                 '    meta.Units = value
                 'End If

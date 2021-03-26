@@ -404,7 +404,7 @@ Namespace PCAxis.Paxiom
             If Me.mContentInfo Is Nothing Then
                 Me.mContentInfo = New ContInfo(mValue.Length - 1)
             End If
-            Me.mContentInfo.SetProperty(name, value)
+            Me.mContentInfo.SetProperty(name, value, mLanguageIndex)
         End Sub
 
 #End Region
