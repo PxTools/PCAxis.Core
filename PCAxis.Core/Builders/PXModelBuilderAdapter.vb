@@ -560,8 +560,23 @@ Namespace PCAxis.Paxiom
             Dim arrFootnotes As String() = inputString.Split(separator, StringSplitOptions.RemoveEmptyEntries)
             Dim footnotes As New List(Of String)
 
+            Dim tempText1 As String
+
             For Each footnote As String In arrFootnotes
-                footnotes.Add(footnote.Replace("#", ControlChars.CrLf))
+
+                Dim arrLessThan As String() = footnote.Split(New Char() {"<"c})
+                For nCount As Integer = 0 To arrLessThan.Length - 1
+                    tempText1 = arrLessThan(nCount)
+                    If tempText1.Contains(">") Then
+                        Dim arrGreaterThan As String() = tempText1.Split(New Char() {">"c}, 2)
+                        arrLessThan(nCount) = arrGreaterThan(0) + ">" + arrGreaterThan(1).Replace("#", ControlChars.CrLf)
+                    Else
+                        arrLessThan(nCount) = tempText1.Replace("#", ControlChars.CrLf)
+                    End If
+                Next
+
+
+                footnotes.Add(String.Join("<", arrLessThan))
             Next
 
             Return footnotes
