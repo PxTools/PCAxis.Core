@@ -309,7 +309,7 @@ Namespace PCAxis.Paxiom
         ''' <param name="name">name of the property <see cref="PXKeywords">PXKeywords</see></param>
         ''' <param name="value">the value of the property</param>
         ''' <remarks></remarks>
-        Protected Friend Sub SetProperty(ByVal name As String, ByVal value As String)
+        Protected Friend Sub SetProperty(ByVal name As String, ByVal value As String, ByVal languageIndex As Integer)
             Select Case name
                 Case PXKeywords.BASEPERIOD
                     Me.mBaseperiod = value
@@ -317,9 +317,9 @@ Namespace PCAxis.Paxiom
                     Me.mCFPrices = value
                 Case PXKeywords.CONTACT
                     If (value.Contains("||")) Then
-                        Me.mContactInfo(mLanguageIndex) = HandleContacts(value)
+                        Me.mContactInfo(languageIndex) = HandleContacts(value)
                     Else
-                        Me.mContact(mLanguageIndex) = value
+                        Me.mContact(languageIndex) = value
                     End If
                 Case PXKeywords.LAST_UPDATED
                     Me.mLastUpdated = value
@@ -332,7 +332,7 @@ Namespace PCAxis.Paxiom
                 Case PXKeywords.STOCKFA
                     Me.mStockFa = value
                 Case PXKeywords.UNITS
-                    Me.mUnits(mLanguageIndex) = value
+                    Me.mUnits(languageIndex) = value
                 Case PXKeywords.REFRENCE_ID
                     Me.mReferenceId = value
             End Select
