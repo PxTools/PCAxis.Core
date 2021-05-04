@@ -554,9 +554,10 @@ Namespace PCAxis.Paxiom
         ''' </summary>
         ''' <param name="inputString">The input footnote string</param>
         ''' <returns>A list of footnote string</returns>
-        ''' <remarks></remarks>
+        ''' <remarks>Mars 2021: Changed to let links with href="foo#bar" pass.</remarks>
         Private Function HandleFootnotes(ByVal inputString As String) As List(Of String)
             Dim separator As String() = {"##"}
+
             Dim arrFootnotes As String() = inputString.Split(separator, StringSplitOptions.RemoveEmptyEntries)
             Dim footnotes As New List(Of String)
 

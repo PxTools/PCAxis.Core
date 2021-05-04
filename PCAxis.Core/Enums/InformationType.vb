@@ -1,4 +1,5 @@
 ﻿Namespace PCAxis.Enums
+    '2021! Changed order so Contact is Nummero Uno for everyone. 
     Public Enum InformationType
         Contact
         OfficialStatistics

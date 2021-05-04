@@ -455,21 +455,21 @@
 
             Dim prec As Integer
             Dim variableCode As String
-			Dim valueCode As String
-			prec = _defaultNumberFormat.NumberDecimalDigits
-			If _indexer.HeadingIndecies IsNot Nothing Then
-				For i As Integer = 0 To _indexer.HeadingIndecies.Length - 1
-					variableCode = _model.Meta.Heading(i).Code
-					If _subPrecisions.ContainsKey(variableCode) Then
-						valueCode = _model.Meta.Heading(i).Values(_indexer.HeadingIndecies(i)).Code
-						If _subPrecisions(variableCode).ContainsKey(valueCode) Then
-							prec = Math.Max(prec, _subPrecisions(variableCode)(valueCode))
-						End If
-					End If
-				Next
-			End If
+            Dim valueCode As String
+            prec = _defaultNumberFormat.NumberDecimalDigits
+            If _indexer.HeadingIndecies IsNot Nothing Then
+                For i As Integer = 0 To _indexer.HeadingIndecies.Length - 1
+                    variableCode = _model.Meta.Heading(i).Code
+                    If _subPrecisions.ContainsKey(variableCode) Then
+                        valueCode = _model.Meta.Heading(i).Values(_indexer.HeadingIndecies(i)).Code
+                        If _subPrecisions(variableCode).ContainsKey(valueCode) Then
+                            prec = Math.Max(prec, _subPrecisions(variableCode)(valueCode))
+                        End If
+                    End If
+                Next
+            End If
 
-			If _indexer.StubIndecies IsNot Nothing Then
+            If _indexer.StubIndecies IsNot Nothing Then
                 For i As Integer = 0 To _indexer.StubIndecies.Length - 1
                     variableCode = _model.Meta.Stub(i).Code
                     If _subPrecisions.ContainsKey(variableCode) Then
@@ -982,7 +982,8 @@
                     AndAlso row(i) <> PXConstant.DATASYMBOL_3 _
                     AndAlso row(i) <> PXConstant.DATASYMBOL_4 _
                     AndAlso row(i) <> PXConstant.DATASYMBOL_5 _
-                    AndAlso row(i) <> PXConstant.DATASYMBOL_6 Then
+                    AndAlso row(i) <> PXConstant.DATASYMBOL_6 _
+                    AndAlso row(i) <> PXConstant.DATASYMBOL_7 Then
 
                     If Not (_secrecy = SecrecyOptionType.Simple And row(i) = 1.0) Then
 
@@ -1004,6 +1005,7 @@
                     AndAlso row(i) <> PXConstant.DATASYMBOL_4 _
                     AndAlso row(i) <> PXConstant.DATASYMBOL_5 _
                     AndAlso row(i) <> PXConstant.DATASYMBOL_6 _
+                    AndAlso row(i) <> PXConstant.DATASYMBOL_7 _
                     AndAlso row(i) <> PXConstant.DATASYMBOL_NIL _
                     AndAlso row(i) <> 0.0 Then
 
