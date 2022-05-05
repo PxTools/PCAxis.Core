@@ -16,15 +16,20 @@
             Dim pd As New List(Of PCAxis.Paxiom.Operations.PivotDescription)()
 
             Dim nonContentVariables = oldModel.Meta.Variables.Where(Function(v) v.IsTime = False And v.IsContentVariable = False)
-            Dim timeVariable = oldModel.Meta.Variables.Where(Function(v) v.IsTime = True)
-            Dim contentVariable = oldModel.Meta.Variables.Where(Function(v) v.IsContentVariable = True)
+            Dim timeVariable = oldModel.Meta.Variables.Where(Function(v) v.IsTime = True).FirstOrDefault()
+            Dim contentVariable = oldModel.Meta.Variables.Where(Function(v) v.IsContentVariable = True).FirstOrDefault()
 
             For Each variable In nonContentVariables
                 pd.Add(New PCAxis.Paxiom.Operations.PivotDescription(variable.Name, PCAxis.Paxiom.PlacementType.Stub))
             Next
 
-            pd.Add(New PCAxis.Paxiom.Operations.PivotDescription(timeVariable.First().Name, PCAxis.Paxiom.PlacementType.Stub))
-            pd.Add(New PCAxis.Paxiom.Operations.PivotDescription(contentVariable.First().Name, PCAxis.Paxiom.PlacementType.Stub))
+            If timeVariable IsNot Nothing Then
+                pd.Add(New PCAxis.Paxiom.Operations.PivotDescription(timeVariable.Name, PCAxis.Paxiom.PlacementType.Stub))
+            End If
+
+            If contentVariable IsNot Nothing Then
+                pd.Add(New PCAxis.Paxiom.Operations.PivotDescription(contentVariable.Name, PCAxis.Paxiom.PlacementType.Stub))
+            End If
 
             Dim pivot As New PCAxis.Paxiom.Operations.Pivot
 
