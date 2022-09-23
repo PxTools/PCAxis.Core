@@ -135,6 +135,41 @@ Namespace PCAxis.Paxiom
         End Function
 
         ''' <summary>
+        ''' PXFileBuilder only supports one valueset and that is _ALL_ which means that the variable
+        ''' values shall be restored to the original ones
+        ''' </summary>
+        ''' <param name="variableCode"></param>
+        ''' <param name="valueSet"></param>
+        Public Overrides Sub ApplyValueSet(ByVal variableCode As String, ByVal valueSet As ValueSetInfo)
+
+            If Not valueSet.ID.Equals("_ALL_") Then
+                Throw New PXException("Cannot apply valueset for PX-file table")
+            End If
+
+            If Not _originalGroupedVariables Is Nothing AndAlso _originalGroupedVariables.ContainsKey(variableCode) Then
+
+                'Get the variable to restore values for
+                Dim var = Me.Model.Meta.Variables.GetByCode(variableCode)
+                'Get the stored original variable 
+                Dim varOriginal = _originalGroupedVariables(variableCode)
+
+                var.CurrentGrouping = Nothing
+                var.CurrentValueSet = Nothing
+
+                'Create the new values
+                var.RecreateValues()
+
+                For Each val As Value In varOriginal.Values
+                    Dim orgVal = val.CreateCopy()
+                    var.Values.Add(val)
+                Next
+
+                'Variable is no longer grouped
+                _originalGroupedVariables.Remove(variableCode)
+            End If
+        End Sub
+
+        ''' <summary>
         ''' Applies the selected grouping on the selected variable
         ''' </summary>
         ''' <param name="variableCode">Code of the variable</param>
