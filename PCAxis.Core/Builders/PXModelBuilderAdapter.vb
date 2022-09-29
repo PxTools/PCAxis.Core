@@ -285,6 +285,15 @@ Namespace PCAxis.Paxiom
         ''' <param name="isDefaultLanguage"></param>
         ''' <remarks></remarks>
         Protected Friend Overridable Sub SetMeta(ByVal keyword As String, ByVal subkey As String, ByVal values As System.Collections.Specialized.StringCollection, ByVal meta As PCAxis.Paxiom.PXMeta, ByVal isDefaultLanguage As Boolean)
+
+            ' Covert double qoutation marks to single qoutation marks.
+            ' We do this because double qoutation marks are not allowed in values for PX file keywords.
+            For index = 0 To values.Count - 1
+                If values(index).Contains("""") Then
+                    values(index) = values(index).Replace("""", "'")
+                End If
+            Next
+
             'TODO Check some of the keywords
             'They should only be set if it is the default language.
             If Logger.IsDebugEnabled Then
