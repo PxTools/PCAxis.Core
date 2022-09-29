@@ -52,7 +52,7 @@ Namespace PCAxis.Paxiom.Extensions
         Public Function DateTimeToPxDateString(ByVal value As DateTime) As String
             If value = DateTime.MinValue Then Return ""
 
-            Return value.ToString("yyyyMMdd HH:mm")
+            Return value.ToString("yyyyMMdd HH:mm", CultureInfo.InvariantCulture)
         End Function
     End Module
 End Namespace
