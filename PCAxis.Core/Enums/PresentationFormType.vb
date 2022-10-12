@@ -13,7 +13,7 @@
         ''' Only text should be displayed
         ''' </summary>
         ''' <remarks></remarks>
-        Text = 1
+        Value = 1
         ''' <summary>
         '''  Both code and value should be displayed and the order should be the code and then the value text. 
         ''' </summary>
