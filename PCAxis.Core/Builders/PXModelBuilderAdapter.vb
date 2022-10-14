@@ -289,7 +289,7 @@ Namespace PCAxis.Paxiom
             ' Covert double qoutation marks to single qoutation marks.
             ' We do this because double qoutation marks are not allowed in values for PX file keywords.
             For index = 0 To values.Count - 1
-                If values(index).Contains("""") Then
+                If values(index) IsNot Nothing AndAlso values(index).Contains("""") Then
                     values(index) = values(index).Replace("""", "'")
                 End If
             Next
