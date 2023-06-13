@@ -646,6 +646,21 @@ Namespace PCAxis.Paxiom
             Return New List(Of GroupingInfo)
         End Function
 
+        ''' <summary>
+        ''' Get grouping by id
+        ''' </summary>
+        ''' <param name="id">Grouping id</param>
+        ''' <returns>Grouping identified by id. If not found Nothing is returned</returns>
+        Public Function GetGrouping(ByVal id As String) As Grouping
+
+            For Each groupInfo As GroupingInfo In _groupingInfoMeta.Keys
+                If groupInfo.ID.Equals(id) Then
+                    Return GetGrouping(groupInfo)
+                End If
+            Next
+
+            Return Nothing
+        End Function
 
         ''' <summary>
         ''' Get the specified grouping. 
