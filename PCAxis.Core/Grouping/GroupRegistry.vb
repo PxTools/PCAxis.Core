@@ -233,7 +233,7 @@ Namespace PCAxis.Paxiom
             End If
 
             If Not Directory.Exists(_groupingDir) Then
-                _logger.WarnFormat("Groupingdirectory does not exists {0}", _groupingDir)
+                _logger.WarnFormat("Groupingdirectory does not exists {0}", _groupingDir.TrimStart("\"c, "/"c))
                 _groupingDir = String.Empty
             End If
 
