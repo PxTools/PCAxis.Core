@@ -229,11 +229,11 @@ Namespace PCAxis.Paxiom
             If IO.Path.IsPathRooted(_groupingsPath) Then
                 _groupingDir = _groupingsPath
             Else
-                _groupingDir = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _groupingsPath)
+                _groupingDir = IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _groupingsPath.TrimStart("\"c, "/"c))
             End If
 
             If Not Directory.Exists(_groupingDir) Then
-                _logger.WarnFormat("Groupingdirectory does not exists {0}", _groupingDir.TrimStart("\"c, "/"c))
+                _logger.WarnFormat("Groupingdirectory does not exists {0}", _groupingDir)
                 _groupingDir = String.Empty
             End If
 
