@@ -654,7 +654,7 @@ Namespace PCAxis.Paxiom
         Public Function GetGrouping(ByVal id As String) As Grouping
 
             For Each groupInfo As GroupingInfo In _groupingInfoMeta.Keys
-                If groupInfo.ID.Equals(id) Then
+                If groupInfo.ID.Equals(id, StringComparison.InvariantCultureIgnoreCase) Then
                     Return GetGrouping(groupInfo)
                 End If
             Next
