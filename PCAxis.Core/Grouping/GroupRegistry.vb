@@ -57,7 +57,7 @@ Namespace PCAxis.Paxiom
 
                     While n >= (bufferSize - 2)
                         'Buffer was to small. Grow buffer and read again
-                        bufferSize = bufferSize + BUFFER_SIZE
+                        bufferSize += BUFFER_SIZE
                         data = New String(" "c, bufferSize)
                         n = GetPrivateProfileString(sectionName, keyName, defaultValue, data, data.Length, path)
                     End While
@@ -116,8 +116,8 @@ Namespace PCAxis.Paxiom
 
         Private Shared _groupRegistry As GroupRegistry
         Private _groupingsLoaded As Boolean = False
-        Private _groupingDir As String
-        Private _logger As log4net.ILog = log4net.LogManager.GetLogger(GetType(GroupRegistry))
+        Private ReadOnly _groupingDir As String
+        Private ReadOnly _logger As log4net.ILog = log4net.LogManager.GetLogger(GetType(GroupRegistry))
 
         ''' <summary>
         ''' Contains loaded valuesets. Used to determine if a valueset file has been loaded into the registry or not.
@@ -428,15 +428,15 @@ Namespace PCAxis.Paxiom
             Try
                 'Is the valueset with this path already added to the registry?
                 If Not valuesetDict.ContainsKey(f.FullName) Then
-                    vs = New Valueset()
-
                     '1. Set Valueset metadata
-                    '--------------------------
-                    vs.Name = ini.Read(f.FullName, "descr", "name").ToLower()
-                    vs.Prestext = ini.Read(f.FullName, "descr", "prestext")
-
                     '2. Add values to valueset
-                    '---------------------------
+                    '--------------------------
+                    vs = New Valueset With {
+                        .Name = ini.Read(f.FullName, "descr", "name").ToLower(),
+                        .Prestext = ini.Read(f.FullName, "descr", "prestext")
+                    }
+
+
                     col1 = ini.GetAllKeysInSection(f.FullName, "valuecode")
                     col2 = ini.GetAllKeysInSection(f.FullName, "valuetext")
 
@@ -472,16 +472,18 @@ Namespace PCAxis.Paxiom
                             If (_strict = False) Or (valuesetName.Equals(vs.Name)) Then
                                 'Get name from the .agg file
                                 groupingName = ini.Read(groupingPath, "aggreg", "name")
-                                gi = New GroupingInfo(grouping)
-                                gi.Name = groupingName
                                 'Always use aggregated values for PX-file groupings
-                                gi.GroupPres = GroupingIncludesType.AggregatedValues
+                                gi = New GroupingInfo(grouping) With {
+                                    .Name = groupingName,
+                                    .GroupPres = GroupingIncludesType.AggregatedValues
+                                }
                                 vs.Groupings.Add(gi)
 
-                                giMeta = New GroupingInfoMeta
-                                giMeta.Valueset = vs
-                                giMeta.Path = groupingPath
-                                giMeta.DefaultDirectory = defaultDirectory
+                                giMeta = New GroupingInfoMeta With {
+                                    .Valueset = vs,
+                                    .Path = groupingPath,
+                                    .DefaultDirectory = defaultDirectory
+                                }
 
                                 'Add to groupingInfoMeta dictionary
                                 groupingInfoMetaDict.Add(gi, giMeta)
@@ -515,8 +517,9 @@ Namespace PCAxis.Paxiom
                                 _logger.Info(domain & " already loaded for " & vsPath)
                             End If
                         Else
-                            vsDict = New Dictionary(Of String, Valueset)
-                            vsDict.Add(vsPath, vs)
+                            vsDict = New Dictionary(Of String, Valueset) From {
+                                {vsPath, vs}
+                            }
                             domainsDict.Add(domain, vsDict)
                         End If
                     Next
@@ -569,7 +572,7 @@ Namespace PCAxis.Paxiom
 
                             'Add code and value to the valueset
                             vs.Values.Add(code, value)
-                            i = i + 1
+                            i += 1
                         Loop
                     End Using
                 Catch e As Exception
@@ -711,15 +714,17 @@ Namespace PCAxis.Paxiom
             'Add groups to the grouping
             groupCodeKeys = ini.GetAllKeysInSection(path, "aggtext")
             For Each groupCodeKey As String In groupCodeKeys
-                group = New Group
-                group.GroupCode = ini.Read(path, "aggreg", groupCodeKey)
-                group.Name = ini.Read(path, "aggtext", groupCodeKey)
+                group = New Group With {
+                    .GroupCode = ini.Read(path, "aggreg", groupCodeKey),
+                    .Name = ini.Read(path, "aggtext", groupCodeKey)
+                }
 
                 'Add childcodes to the group
                 childCodeKeys = ini.GetAllKeysInSection(path, group.GroupCode)
                 For Each childCodeKey As String In childCodeKeys
-                    Dim child As New GroupChildValue
-                    child.Code = ini.Read(path, group.GroupCode, childCodeKey)
+                    Dim child As New GroupChildValue With {
+                        .Code = ini.Read(path, group.GroupCode, childCodeKey)
+                    }
                     If giMeta.Valueset.Values.TryGetValue(child.Code, child.Name) Then
                         group.ChildCodes.Add(child)
                     End If
