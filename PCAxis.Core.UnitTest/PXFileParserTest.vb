@@ -7,7 +7,7 @@ Namespace PCAxis.PX.Core.UnitTest
         <TestMethod>
         Sub ShouldReturnDescription()
             'Arrange
-            Dim e As PXFileParser = New PXFileParser()
+            Dim e As New PXFileParser()
 
             'Act
             Dim testDesc As String = e.Description

@@ -15,10 +15,10 @@ Namespace PCAxis.Paxiom.Localization
         Implements IResourceReader
 
 
-        Private Shared _logger As log4net.ILog = log4net.LogManager.GetLogger(GetType(PxResourceReader))
+        Private Shared ReadOnly _logger As log4net.ILog = log4net.LogManager.GetLogger(GetType(PxResourceReader))
 
-        Private _culture As String = ""
-        Private _basename As String = ""
+        Private ReadOnly _culture As String = ""
+        Private ReadOnly _basename As String = ""
         Private _validXML As Boolean = True
 
         Private Shared _languagePath As String = ""
