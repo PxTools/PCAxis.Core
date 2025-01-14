@@ -18,7 +18,7 @@ Namespace PCAxis.Paxiom
             mContact = New String(0) {}
             mUnits = New String(0) {}
             mContact(0) = ""
-            mContactInfo = New List(Of Contact)() {}
+            mContactInfo = New List(Of Contact)(0) {}
         End Sub
 
         ''' <summary>
@@ -81,6 +81,7 @@ Namespace PCAxis.Paxiom
         Private mCFPrices As String
         <LanguageDependent()>
         Private mContact() As String
+        <LanguageDependent()>
         Private mContactInfo() As List(Of Contact)
         Private mLastUpdated As String
         Private mRefPeriod As String
