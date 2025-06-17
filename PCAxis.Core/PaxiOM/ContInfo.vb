@@ -17,6 +17,7 @@ Namespace PCAxis.Paxiom
         Public Sub New()
             mContact = New String(0) {}
             mUnits = New String(0) {}
+            mBaseperiod = New String(0) {}
             mContact(0) = ""
             mContactInfo = New List(Of Contact)(0) {}
         End Sub
@@ -29,6 +30,7 @@ Namespace PCAxis.Paxiom
         Public Sub New(ByVal internalBufferSize As Integer)
             mContact = New String(internalBufferSize) {}
             mUnits = New String(internalBufferSize) {}
+            mBaseperiod = New String(internalBufferSize) {}
             mContactInfo = New List(Of Contact)(internalBufferSize) {}
         End Sub
 
@@ -45,12 +47,14 @@ Namespace PCAxis.Paxiom
             ci = CType(Me.MemberwiseClone(), ContInfo)
             ci.mContact = New String(numberOfLanguages - 1) {}
             ci.mUnits = New String(numberOfLanguages - 1) {}
+            ci.mBaseperiod = New String(numberOfLanguages - 1) {}
 
             If Me.mContact.Count() = ci.mContact.Count() AndAlso Me.mContact.Count() = numberOfLanguages Then
                 For i As Integer = 0 To numberOfLanguages - 1
                     ci.mContact(i) = Me.mContact(i)
                     ci.mUnits(i) = Me.mUnits(i)
                     ci.mContactInfo(i) = Me.mContactInfo(i)
+                    ci.mBaseperiod(i) = Me.mBaseperiod(i)
                 Next
             End If
 
@@ -77,7 +81,8 @@ Namespace PCAxis.Paxiom
 #Region "Private fields"
         '<value>The name of value that the ContInfo is connectet to</value>
         Private mValue As String
-        Private mBaseperiod As String
+        <LanguageDependent()>
+        Private mBaseperiod() As String
         Private mCFPrices As String
         <LanguageDependent()>
         Private mContact() As String
@@ -119,10 +124,10 @@ Namespace PCAxis.Paxiom
         ''' <remarks></remarks>
         Public Property Baseperiod() As String
             Get
-                Return Me.mBaseperiod
+                Return Me.mBaseperiod(mLanguageIndex)
             End Get
             Set(ByVal value As String)
-                Me.mBaseperiod = value
+                Me.mBaseperiod(mLanguageIndex) = value
             End Set
         End Property
 
@@ -313,7 +318,7 @@ Namespace PCAxis.Paxiom
         Protected Friend Sub SetProperty(ByVal name As String, ByVal value As String, ByVal languageIndex As Integer)
             Select Case name
                 Case PXKeywords.BASEPERIOD
-                    Me.mBaseperiod = value
+                    Me.mBaseperiod(languageIndex) = value
                 Case PXKeywords.CFPRICES
                     Me.mCFPrices = value
                 Case PXKeywords.CONTACT
@@ -416,7 +421,7 @@ Namespace PCAxis.Paxiom
         ''' <remarks></remarks>
         Protected Friend Sub New(ByVal info As System.Runtime.Serialization.SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
             mContact = CType(info.GetValue("Contact", GetType(String())), String())
-            mBaseperiod = info.GetString("Baseperiod")
+            mBaseperiod = CType(info.GetValue("Baseperiod", GetType(String())), String())
             mCFPrices = info.GetString("mCFPrices")
             mLastUpdated = info.GetString("mLastUpdated")
             mRefPeriod = info.GetString("mRefPeriod")
