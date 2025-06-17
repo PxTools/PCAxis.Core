@@ -1,5 +1,5 @@
-﻿Imports System.Globalization
-Imports System.Collections.Concurrent
+﻿Imports System.Collections.Concurrent
+Imports System.Globalization
 
 Namespace PCAxis.Paxiom
 
@@ -21,6 +21,22 @@ Namespace PCAxis.Paxiom
                 End Get
                 Set(ByVal value As Boolean)
                     _removeContent = value
+                End Set
+            End Property
+
+            Private Shared _omitContentsVariableInTitle As Boolean = False
+            ''' <summary>
+            ''' If the contents variable should be omitted in the title
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks>Default value is False</remarks>
+            Public Shared Property OmitContentsVariableInTitle() As Boolean
+                Get
+                    Return _omitContentsVariableInTitle
+                End Get
+                Set(ByVal value As Boolean)
+                    _omitContentsVariableInTitle = value
                 End Set
             End Property
         End Class
@@ -69,14 +85,14 @@ Namespace PCAxis.Paxiom
 #Region "DataSymbols"
 
         Public Class DataSymbols
-            Private Shared _dataSymbols() As String = _
-                    {PXConstant.DATASYMBOL_NIL_STRING, _
-                     PXConstant.DATASYMBOL_1_STRING, _
-                     PXConstant.DATASYMBOL_2_STRING, _
-                     PXConstant.DATASYMBOL_3_STRING, _
-                     PXConstant.DATASYMBOL_4_STRING, _
-                     PXConstant.DATASYMBOL_5_STRING, _
-                     PXConstant.DATASYMBOL_6_STRING, _
+            Private Shared _dataSymbols() As String =
+                    {PXConstant.DATASYMBOL_NIL_STRING,
+                     PXConstant.DATASYMBOL_1_STRING,
+                     PXConstant.DATASYMBOL_2_STRING,
+                     PXConstant.DATASYMBOL_3_STRING,
+                     PXConstant.DATASYMBOL_4_STRING,
+                     PXConstant.DATASYMBOL_5_STRING,
+                     PXConstant.DATASYMBOL_6_STRING,
                      PXConstant.DATASYMBOL_7_STRING}
 
             Public Shared Property Symbol(ByVal index As Integer) As String
