@@ -1,10 +1,6 @@
-Imports System.Xml
-Imports System.IO
-Imports System.Reflection
-Imports PCAxis.Paxiom.Localization
 Imports PCAxis.Paxiom.ClassAttributes
+Imports PCAxis.Paxiom.Localization
 'Imports System.Windows.Forms
-Imports Microsoft.VisualBasic
 
 Namespace PCAxis.Paxiom
 
@@ -12,7 +8,7 @@ Namespace PCAxis.Paxiom
     ''' The metadata for a statistical cube.
     ''' </summary>
     ''' <remarks></remarks>
-    <Serializable()> _
+    <Serializable()>
     Public Class PXMeta
         Implements System.Runtime.Serialization.ISerializable
 
@@ -26,14 +22,14 @@ Namespace PCAxis.Paxiom
         Private _charset As String
         Private _matrix As String
         Private _subjectCode As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _subjectArea(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _contents(0) As String
         Private _decimals As Integer = -1
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _title(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _description(0) As String
         Private _language As String
         Private _axisVersion As String
@@ -44,59 +40,59 @@ Namespace PCAxis.Paxiom
         Private _creationDate As String
         Private _copyright As Boolean
         Private _showDecimals As Integer = -1
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _source(0) As String
         Private _confidential As Integer = 0
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _database(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _infoFile(0) As String
         Private _contentInfo As ContInfo
         Private _updateFrequency As String
         Private _nextUpdate As String
         Private _PXServer As String
         Private _directoryPath As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _information(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _link(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _survey(0) As String
         Private _tableID As String
         Private _defaultGraph As Integer = Integer.MinValue
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _dataNoteSum(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _notes(0) As Notes
         Private _variables As Variables = New Variables
         Private _heading As Variables = New Variables
         Private _stub As Variables = New Variables
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _cellNotes(0) As CellNotes
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _dataNoteCells(0) As DataNoteCells
         Private _contentVariable As Variable = Nothing
         Private _rounding As RoundingType = RoundingType.None
         Private _synonyms As String
         Private _currentLanguage As String
 
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _dataSymbol1(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _dataSymbol2(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _dataSymbol3(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _dataSymbol4(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _dataSymbol5(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _dataSymbol6(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _dataSymbol7(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _dataSymbolNIL(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _dataSymbolSum(0) As String
 
         Private _mainTable As String
@@ -110,9 +106,9 @@ Namespace PCAxis.Paxiom
         Private _preferredLanguage As String = Nothing
 
         Private _firstPublished As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _datanote(0) As String
-        <LanguageDependent()> _
+        <LanguageDependent()>
         Private _metaId(0) As String
 
 #End Region
@@ -1342,12 +1338,21 @@ Namespace PCAxis.Paxiom
 
             Dim vars As New List(Of Variable)
 
-            For Each var As Variable In Me.Variables
-                If Not (PCAxis.Paxiom.Settings.Metadata.RemoveSingleContent AndAlso var.IsContentVariable AndAlso var.Values.Count = 1) Then
-                    'Add all variables except the content variable if it only contains one value
-                    vars.Add(var)
-                End If
-            Next
+            If PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle Then
+                For Each var As Variable In Me.Variables
+                    If Not var.IsContentVariable Then
+                        'Add all variables except the content variable
+                        vars.Add(var)
+                    End If
+                Next
+            Else
+                For Each var As Variable In Me.Variables
+                    If Not (PCAxis.Paxiom.Settings.Metadata.RemoveSingleContent AndAlso var.IsContentVariable AndAlso var.Values.Count = 1) Then
+                        'Add all variables except the content variable if it only contains one value
+                        vars.Add(var)
+                    End If
+                Next
+            End If
 
             'Remember current language
             oldCurrentLanguageIndex = CurrentLanguageIndex
