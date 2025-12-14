@@ -407,7 +407,7 @@ Namespace PCAxis.Paxiom
                     meta.InfoFile = values(0)
                 Case PXKeywords.FIRST_PUBLISHED
                     meta.FirstPublished = values(0)
-                Case PXKeywords.BASEPERIOD, PXKeywords.CFPRICES, PXKeywords.CONTACT, PXKeywords.LAST_UPDATED, PXKeywords.REFPERIOD, PXKeywords.SEASADJ, PXKeywords.DAYADJ, PXKeywords.STOCKFA, PXKeywords.UNITS, PXKeywords.REFRENCE_ID
+                Case PXKeywords.BASEPERIOD, PXKeywords.CFPRICES, PXKeywords.CONTACT, PXKeywords.LAST_UPDATED, PXKeywords.REFPERIOD, PXKeywords.SEASADJ, PXKeywords.DAYADJ, PXKeywords.STOCKFA, PXKeywords.UNITS, PXKeywords.REFRENCE_ID, PXKeywords.CNMM_ALTERNATIVE_CONTENTS_TEXT
                     CreateContentInfo(subkey, keyword, values(0), meta)
                 Case PXKeywords.DATANOTE
                     SetDatanote(subkey, values(0), meta)
