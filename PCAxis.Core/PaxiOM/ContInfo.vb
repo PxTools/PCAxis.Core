@@ -17,6 +17,7 @@ Namespace PCAxis.Paxiom
         Public Sub New()
             mContact = New String(0) {}
             mUnits = New String(0) {}
+            mAlternativeText = New String(0) {}
             mBaseperiod = New String(0) {}
             mContact(0) = ""
             mContactInfo = New List(Of Contact)(0) {}
@@ -30,6 +31,7 @@ Namespace PCAxis.Paxiom
         Public Sub New(ByVal internalBufferSize As Integer)
             mContact = New String(internalBufferSize) {}
             mUnits = New String(internalBufferSize) {}
+            mAlternativeText = New String(internalBufferSize) {}
             mBaseperiod = New String(internalBufferSize) {}
             mContactInfo = New List(Of Contact)(internalBufferSize) {}
         End Sub
@@ -53,6 +55,7 @@ Namespace PCAxis.Paxiom
                 For i As Integer = 0 To numberOfLanguages - 1
                     ci.mContact(i) = Me.mContact(i)
                     ci.mUnits(i) = Me.mUnits(i)
+                    ci.mAlternativeText(i) = Me.mAlternativeText(i)
                     ci.mContactInfo(i) = Me.mContactInfo(i)
                     ci.mBaseperiod(i) = Me.mBaseperiod(i)
                 Next
@@ -97,6 +100,8 @@ Namespace PCAxis.Paxiom
         Private mUnits() As String
         Private mReferenceId As String
         Protected Friend mLanguageIndex As Integer = 0
+        <LanguageDependent()>
+        Private mAlternativeText() As String
 
 #End Region
 
@@ -274,6 +279,22 @@ Namespace PCAxis.Paxiom
             End Set
         End Property
 
+
+        ''' <summary>
+        ''' Alternative text for the content
+        ''' </summary>
+        ''' <value>The alternativ text for the content</value>
+        ''' <returns>The alternative text for the content</returns>
+        ''' <remarks></remarks>
+        Public Property AlternativeText() As String
+            Get
+                Return Me.mAlternativeText(mLanguageIndex)
+            End Get
+            Set(ByVal value As String)
+                Me.mAlternativeText(mLanguageIndex) = value
+            End Set
+        End Property
+
         ''' <summary>
         ''' Optinal refrence id could be anything
         ''' </summary>
@@ -341,6 +362,8 @@ Namespace PCAxis.Paxiom
                     Me.mUnits(languageIndex) = value
                 Case PXKeywords.REFRENCE_ID
                     Me.mReferenceId = value
+                Case PXKeywords.CNMM_ALTERNATIVE_CONTENTS_TEXT
+                    Me.mAlternativeText(languageIndex) = value
             End Select
         End Sub
 
@@ -411,6 +434,7 @@ Namespace PCAxis.Paxiom
             info.AddValue("mDayAdj", mDayAdj)
             info.AddValue("mStockFa", mStockFa)
             info.AddValue("mUnits", mUnits)
+            info.AddValue("mAlternativeText", mAlternativeText)
         End Sub
 
         ''' <summary>
@@ -429,6 +453,7 @@ Namespace PCAxis.Paxiom
             mDayAdj = info.GetString("mDayAdj")
             mStockFa = info.GetString("mStockFa")
             mUnits = CType(info.GetValue("mUnits", GetType(String())), String())
+            mAlternativeText = CType(info.GetValue("mAlternativeText", GetType(String())), String())
         End Sub
 
     End Class

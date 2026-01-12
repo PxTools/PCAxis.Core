@@ -102,6 +102,8 @@ Namespace PCAxis.Paxiom
         Public Const FIRST_PUBLISHED As String = "FIRST-PUBLISHED"
         Public Const DATANOTE As String = "DATANOTE"
         Public Const META_ID As String = "META-ID"
+        'UNDOCUMENTED PX Keywords used by CNMM
+        Public Const CNMM_ALTERNATIVE_CONTENTS_TEXT As String = "CNMM-ALTERNATIVE-CONTENTS-TEXT"
 
 #Region "Class KeywordInfo"
         Public Class KeywordInfo
