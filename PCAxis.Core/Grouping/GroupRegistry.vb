@@ -7,86 +7,86 @@ Namespace PCAxis.Paxiom
     Public Class GroupRegistry
 
 #Region "IniReader Class"
-        ''' <summary>
-        ''' Ini-file reader. Used by the groupregistry when reading from the .vs and .agg files
-        ''' </summary>
-        ''' <remarks></remarks>
-        Private Class IniReader
-            Private Const BUFFER_SIZE As Integer = 1024
-#Region "API Calls"
-            Private Declare Unicode Function GetPrivateProfileString Lib "kernel32" _
-            Alias "GetPrivateProfileStringW" (ByVal lpApplicationName As String, _
-            ByVal lpKeyName As String, ByVal lpDefault As String, _
-            ByVal lpReturnedString As String, ByVal nSize As Int32, _
-            ByVal lpFileName As String) As Int32
-#End Region
-#Region "Read overloads"
-            Public Overloads Function Read(ByVal path As String, _
-                                           ByVal sectionName As String, _
-                                           ByVal keyName As String) As String
-                ' overload 1 assumes zero-length default
-                Return Read(path, sectionName, keyName, "")
-            End Function
+        '        ''' <summary>
+        '        ''' Ini-file reader. Used by the groupregistry when reading from the .vs and .agg files
+        '        ''' </summary>
+        '        ''' <remarks></remarks>
+        '        Private Class IniReader
+        '            Private Const BUFFER_SIZE As Integer = 1024
+        '#Region "API Calls"
+        '            Private Declare Unicode Function GetPrivateProfileString Lib "kernel32" _
+        '            Alias "GetPrivateProfileStringW" (ByVal lpApplicationName As String, _
+        '            ByVal lpKeyName As String, ByVal lpDefault As String, _
+        '            ByVal lpReturnedString As String, ByVal nSize As Int32, _
+        '            ByVal lpFileName As String) As Int32
+        '#End Region
+        '#Region "Read overloads"
+        '            Public Overloads Function Read(ByVal path As String, _
+        '                                           ByVal sectionName As String, _
+        '                                           ByVal keyName As String) As String
+        '                ' overload 1 assumes zero-length default
+        '                Return Read(path, sectionName, keyName, "")
+        '            End Function
 
-            Public Overloads Function Read(ByVal path As String, _
-                                           ByVal sectionName As String) As String
-                ' overload 2 returns all keys in a given section of the given file
-                Return Read(path, sectionName, Nothing, "")
-            End Function
+        '            Public Overloads Function Read(ByVal path As String, _
+        '                                           ByVal sectionName As String) As String
+        '                ' overload 2 returns all keys in a given section of the given file
+        '                Return Read(path, sectionName, Nothing, "")
+        '            End Function
 
-            Public Overloads Function Read(ByVal path As String) As String
-                ' overload 3 returns all section names given just path
-                Return Read(path, Nothing, Nothing, "")
-            End Function
-#End Region
+        '            Public Overloads Function Read(ByVal path As String) As String
+        '                ' overload 3 returns all section names given just path
+        '                Return Read(path, Nothing, Nothing, "")
+        '            End Function
+        '#End Region
 
-#Region "Public methods"
+        '#Region "Public methods"
 
-            Public Overloads Function Read(ByVal path As String, _
-                                           ByVal sectionName As String, _
-                                           ByVal keyName As String, _
-                                           ByVal defaultValue As String) As String
-                Dim n As Integer
-                Dim bufferSize As Integer = BUFFER_SIZE
-                Dim data As String
+        '            Public Overloads Function Read(ByVal path As String, _
+        '                                           ByVal sectionName As String, _
+        '                                           ByVal keyName As String, _
+        '                                           ByVal defaultValue As String) As String
+        '                Dim n As Integer
+        '                Dim bufferSize As Integer = BUFFER_SIZE
+        '                Dim data As String
 
-                data = New String(" "c, bufferSize)
-                n = GetPrivateProfileString(sectionName, keyName, defaultValue, data, data.Length, path)
+        '                data = New String(" "c, bufferSize)
+        '                n = GetPrivateProfileString(sectionName, keyName, defaultValue, data, data.Length, path)
 
-                If n > 0 Then
+        '                If n > 0 Then
 
-                    While n >= (bufferSize - 2)
-                        'Buffer was to small. Grow buffer and read again
-                        bufferSize += BUFFER_SIZE
-                        data = New String(" "c, bufferSize)
-                        n = GetPrivateProfileString(sectionName, keyName, defaultValue, data, data.Length, path)
-                    End While
+        '                    While n >= (bufferSize - 2)
+        '                        'Buffer was to small. Grow buffer and read again
+        '                        bufferSize += BUFFER_SIZE
+        '                        data = New String(" "c, bufferSize)
+        '                        n = GetPrivateProfileString(sectionName, keyName, defaultValue, data, data.Length, path)
+        '                    End While
 
-                    Return data.Substring(0, n)
-                Else
-                    Return ""
-                End If
-            End Function
+        '                    Return data.Substring(0, n)
+        '                Else
+        '                    Return ""
+        '                End If
+        '            End Function
 
-            Public Function GetAllKeysInSection(ByVal path As String, ByVal section As String) As System.Collections.Specialized.StringCollection
-                Dim col As New System.Collections.Specialized.StringCollection
-                Dim value As String
-                Dim keys() As String
+        '            Public Function GetAllKeysInSection(ByVal path As String, ByVal section As String) As System.Collections.Specialized.StringCollection
+        '                Dim col As New System.Collections.Specialized.StringCollection
+        '                Dim value As String
+        '                Dim keys() As String
 
-                value = Read(path, section) ' get all keys in section
-                value = value.Replace(ControlChars.NullChar, "|"c) ' change embedded NULLs to pipe chars
-                keys = value.Split("|"c)
+        '                value = Read(path, section) ' get all keys in section
+        '                value = value.Replace(ControlChars.NullChar, "|"c) ' change embedded NULLs to pipe chars
+        '                keys = value.Split("|"c)
 
-                For i As Integer = 0 To keys.Length - 1
-                    If Not String.IsNullOrEmpty(keys(i)) Then
-                        col.Add(keys(i))
-                    End If
-                Next
+        '                For i As Integer = 0 To keys.Length - 1
+        '                    If Not String.IsNullOrEmpty(keys(i)) Then
+        '                        col.Add(keys(i))
+        '                    End If
+        '                Next
 
-                Return col
-            End Function
-#End Region
-        End Class
+        '                Return col
+        '            End Function
+        '#End Region
+        '        End Class
 #End Region
 
 
@@ -406,7 +406,8 @@ Namespace PCAxis.Paxiom
                                      ByVal groupingInfoMetaDict As Dictionary(Of GroupingInfo, GroupingInfoMeta), _
                                      ByVal defaultDirectory As Boolean)
             Dim vs As Valueset
-            Dim ini As New IniReader
+            Dim ini As New IniFile(f.FullName)
+            ini.Load()
             Dim col1, col2 As System.Collections.Specialized.StringCollection
             Dim code As String
             Dim value As String
@@ -432,26 +433,26 @@ Namespace PCAxis.Paxiom
                     '2. Add values to valueset
                     '--------------------------
                     vs = New Valueset With {
-                        .Name = ini.Read(f.FullName, "descr", "name").ToLower(),
-                        .Prestext = ini.Read(f.FullName, "descr", "prestext")
+                        .Name = ini.GetValue("descr", "name").ToLower(),
+                        .Prestext = ini.GetValue("descr", "prestext")
                     }
 
 
-                    col1 = ini.GetAllKeysInSection(f.FullName, "valuecode")
-                    col2 = ini.GetAllKeysInSection(f.FullName, "valuetext")
+                    col1 = ini.GetAllKeysInSection("valuecode")
+                    col2 = ini.GetAllKeysInSection("valuetext")
 
                     If col1.Count <> col2.Count Then
                         Throw New PXException("Valuecode and valuetext section must contain the same number of entries")
                     End If
 
                     For i As Integer = 0 To col1.Count - 1
-                        code = ini.Read(f.FullName, "valuecode", col1(i))
+                        code = ini.GetValue("valuecode", col1(i))
                         If (i.Equals(999) And code.Equals("****")) Then
                             'Handle .vsc and .vsn files
                             ReadLargeValueset(f.FullName, vs)
                             Exit For
                         Else
-                            value = ini.Read(f.FullName, "valuetext", col2(i))
+                            value = ini.GetValue("valuetext", col2(i))
                             If Not vs.Values.ContainsKey(code) Then
                                 vs.Values.Add(code, value)
                             End If
@@ -461,17 +462,17 @@ Namespace PCAxis.Paxiom
                     '3. Add groupings to valueset
                     '---------------------------
                     'Get all keys in aggreg section
-                    col1 = ini.GetAllKeysInSection(f.FullName, "aggreg")
+                    col1 = ini.GetAllKeysInSection("aggreg")
 
                     For i As Integer = 0 To col1.Count - 1
-                        grouping = ini.Read(f.FullName, "aggreg", col1(i))
+                        grouping = ini.GetValue("aggreg", col1(i))
                         groupingPath = Path.Combine(f.DirectoryName, grouping)
                         If System.IO.File.Exists(groupingPath) Then
-                            valuesetName = ini.Read(groupingPath, "aggreg", "valueset").ToLower()
+                            valuesetName = ini.GetValue("aggreg", "valueset").ToLower()
                             'Verify that the aggregation belongs to the valueset (or if not check shall be done...)
                             If (_strict = False) Or (valuesetName.Equals(vs.Name)) Then
                                 'Get name from the .agg file
-                                groupingName = ini.Read(groupingPath, "aggreg", "name")
+                                groupingName = ini.GetValue("aggreg", "name")
                                 'Always use aggregated values for PX-file groupings
                                 gi = New GroupingInfo(grouping) With {
                                     .Name = groupingName,
@@ -498,10 +499,10 @@ Namespace PCAxis.Paxiom
                     '5. Add the domain(s) to the domain dictionary
                     '-------------------------------------------
                     'Get all keys in domain section
-                    col1 = ini.GetAllKeysInSection(f.FullName, "domain")
+                    col1 = ini.GetAllKeysInSection("domain")
 
                     For i As Integer = 0 To col1.Count - 1
-                        domain = ini.Read(f.FullName, "domain", col1(i)).ToLower()
+                        domain = ini.GetValue("domain", col1(i)).ToLower()
 
                         If defaultDirectory Then
                             vsPath = ""
@@ -590,7 +591,8 @@ Namespace PCAxis.Paxiom
         ''' <returns>True if the valueset belongs to the specified domain, else false</returns>
         ''' <remarks></remarks>
         Private Function CheckDomain(ByVal f As FileInfo, ByVal domain As String) As Boolean
-            Dim ini As New IniReader
+            Dim ini As New IniFile(f.FullName)
+            ini.Load()
             Dim domains As System.Collections.Specialized.StringCollection
             Dim name As String
 
@@ -599,10 +601,10 @@ Namespace PCAxis.Paxiom
             End If
 
             'Get all keys in domain section
-            domains = ini.GetAllKeysInSection(f.FullName, "domain")
+            domains = ini.GetAllKeysInSection("domain")
 
             For i As Integer = 0 To domains.Count - 1
-                name = ini.Read(f.FullName, "domain", domains(i))
+                name = ini.GetValue("domain", domains(i))
                 If domain.ToLower() = name.ToLower() Then
                     Return True
                 End If
@@ -676,7 +678,7 @@ Namespace PCAxis.Paxiom
         ''' <remarks></remarks>
         Public Function GetGrouping(ByVal gi As GroupingInfo) As Grouping
             Dim grouping As New Grouping
-            Dim ini As New IniReader
+            Dim ini As IniFile
             Dim path As String
             Dim groupCodeKeys As System.Collections.Specialized.StringCollection
             Dim childCodeKeys As System.Collections.Specialized.StringCollection
@@ -707,23 +709,26 @@ Namespace PCAxis.Paxiom
                 Throw New PCAxis.Paxiom.PXException("Could not load grouping")
             End If
 
+            ini = New IniFile(path)
+            ini.Load()
+
             grouping.ID = gi.ID
-            grouping.Name = ini.Read(path, "aggreg", "name")
-            grouping.Map = ini.Read(path, "aggreg", "map")
+            grouping.Name = ini.GetValue("aggreg", "name")
+            grouping.Map = ini.GetValue("aggreg", "map")
 
             'Add groups to the grouping
-            groupCodeKeys = ini.GetAllKeysInSection(path, "aggtext")
+            groupCodeKeys = ini.GetAllKeysInSection("aggtext")
             For Each groupCodeKey As String In groupCodeKeys
                 group = New Group With {
-                    .GroupCode = ini.Read(path, "aggreg", groupCodeKey),
-                    .Name = ini.Read(path, "aggtext", groupCodeKey)
+                    .GroupCode = ini.GetValue("aggreg", groupCodeKey),
+                    .Name = ini.GetValue("aggtext", groupCodeKey)
                 }
 
                 'Add childcodes to the group
-                childCodeKeys = ini.GetAllKeysInSection(path, group.GroupCode)
+                childCodeKeys = ini.GetAllKeysInSection(group.GroupCode)
                 For Each childCodeKey As String In childCodeKeys
                     Dim child As New GroupChildValue With {
-                        .Code = ini.Read(path, group.GroupCode, childCodeKey)
+                        .Code = ini.GetValue(group.GroupCode, childCodeKey)
                     }
                     If giMeta.Valueset.Values.TryGetValue(child.Code, child.Name) Then
                         group.ChildCodes.Add(child)
