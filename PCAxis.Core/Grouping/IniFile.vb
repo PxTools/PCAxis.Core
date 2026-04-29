@@ -62,6 +62,8 @@ Public Class IniFile
                 section.Data(key.ToUpper()) = New KeyValuePair(Of String, String)(key, value)
             End If
         Next
+
+        _stream.Close()
     End Sub
 
     Private Function GetSection(section As String) As Section
@@ -74,8 +76,17 @@ Public Class IniFile
         Return sectionData
     End Function
 
-    Public Function GetSections() As IEnumerable(Of String)
+    Public Function GetAllSections() As IEnumerable(Of String)
         Return _data.Keys
+    End Function
+
+    Public Function GetAllKeysInSection(section As String) As IEnumerable(Of String)
+        Dim sectionKey = section.ToUpper()
+        Dim sectionData As Section = Nothing
+        If _data.TryGetValue(sectionKey, sectionData) Then
+            Return sectionData.Data.Values.Select(Of String)(Function(kv) kv.Key)
+        End If
+        Return Array.Empty(Of String)()
     End Function
 
     Public Function GetValue(section As String, key As String, Optional defaultValue As String = "") As String
