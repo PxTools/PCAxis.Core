@@ -400,15 +400,15 @@ Namespace PCAxis.Paxiom
         ''' <param name="groupingInfoMetaDict">Dictionary that tells which GroupingInfoMeta that belongs to a specific GroupingInfo object</param>
         ''' <param name="defaultDirectory">Tells if the .vs file is in the (default) grouping directory or not</param>
         ''' <remarks></remarks>
-        Private Sub ReadValuesetFile(ByVal f As FileInfo, _
-                                     ByVal valuesetDict As Dictionary(Of String, Valueset), _
-                                     ByVal domainsDict As Dictionary(Of String, Dictionary(Of String, Valueset)), _
-                                     ByVal groupingInfoMetaDict As Dictionary(Of GroupingInfo, GroupingInfoMeta), _
+        Private Sub ReadValuesetFile(ByVal f As FileInfo,
+                                     ByVal valuesetDict As Dictionary(Of String, Valueset),
+                                     ByVal domainsDict As Dictionary(Of String, Dictionary(Of String, Valueset)),
+                                     ByVal groupingInfoMetaDict As Dictionary(Of GroupingInfo, GroupingInfoMeta),
                                      ByVal defaultDirectory As Boolean)
             Dim vs As Valueset
             Dim ini As New IniFile(f.FullName)
             ini.Load()
-            Dim col1, col2 As System.Collections.Specialized.StringCollection
+            Dim col1, col2 As IEnumerable(Of String)
             Dim code As String
             Dim value As String
             Dim domain As String
@@ -468,11 +468,13 @@ Namespace PCAxis.Paxiom
                         grouping = ini.GetValue("aggreg", col1(i))
                         groupingPath = Path.Combine(f.DirectoryName, grouping)
                         If System.IO.File.Exists(groupingPath) Then
-                            valuesetName = ini.GetValue("aggreg", "valueset").ToLower()
+                            Dim iniGrp = New IniFile(groupingPath)
+                            iniGrp.Load()
+                            valuesetName = iniGrp.GetValue("aggreg", "valueset").ToLower()
                             'Verify that the aggregation belongs to the valueset (or if not check shall be done...)
                             If (_strict = False) Or (valuesetName.Equals(vs.Name)) Then
                                 'Get name from the .agg file
-                                groupingName = ini.GetValue("aggreg", "name")
+                                groupingName = iniGrp.GetValue("aggreg", "name")
                                 'Always use aggregated values for PX-file groupings
                                 gi = New GroupingInfo(grouping) With {
                                     .Name = groupingName,
@@ -680,8 +682,8 @@ Namespace PCAxis.Paxiom
             Dim grouping As New Grouping
             Dim ini As IniFile
             Dim path As String
-            Dim groupCodeKeys As System.Collections.Specialized.StringCollection
-            Dim childCodeKeys As System.Collections.Specialized.StringCollection
+            Dim groupCodeKeys As IEnumerable(Of String)
+            Dim childCodeKeys As IEnumerable(Of String)
             Dim group As Group
             Dim giMeta As GroupingInfoMeta
 

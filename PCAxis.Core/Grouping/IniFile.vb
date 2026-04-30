@@ -1,6 +1,4 @@
-﻿Imports System
-Imports System.Collections.Generic
-Imports System.IO
+﻿Imports System.IO
 
 Public Class IniFile
 
@@ -16,11 +14,42 @@ Public Class IniFile
 
     Private ReadOnly _stream As Stream
     Private ReadOnly _data As New Dictionary(Of String, Section)()
+    Private ReadOnly _encoding As System.Text.Encoding
+
+    Private Shared Function GetEncodeing(path As String) As System.Text.Encoding
+        Dim cs As String
+        Dim BUFFER_SIZE As Integer = 1024
+        Dim buffer(BUFFER_SIZE - 1) As Byte
+        Dim size As Integer
+        Using fs As System.IO.FileStream = System.IO.File.OpenRead(path)
+            Dim det As Ude.ICharsetDetector
+            det = New Ude.CharsetDetector
+            Dim fi As New System.IO.FileInfo(path)
+            size = Math.Min(BUFFER_SIZE, Convert.ToInt32(fi.Length))
+            size = fs.Read(buffer, 0, size)
+            det.Feed(buffer, 0, size)
+            det.DataEnd()
+
+            cs = det.Charset
+        End Using
+
+        If cs Is Nothing Then
+            Return System.Text.Encoding.Default
+        End If
+
+        If String.Compare(cs, "ASCII", True) = 0 Then
+            Return System.Text.Encoding.Default
+        End If
+
+        Return System.Text.Encoding.GetEncoding(cs)
+    End Function
+
 
     Public Sub New(path As String)
         If String.IsNullOrWhiteSpace(path) Then
             Throw New ArgumentException("Path must not be null or whitespace.", NameOf(path))
         End If
+        _encoding = GetEncodeing(path)
         _stream = New FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read)
     End Sub
 
@@ -28,11 +57,12 @@ Public Class IniFile
         If stream Is Nothing Then
             Throw New ArgumentNullException(NameOf(stream))
         End If
+        _encoding = System.Text.Encoding.Default
         _stream = stream
     End Sub
 
     Protected Iterator Function ReadLines() As IEnumerable(Of String)
-        Using reader As New StreamReader(_stream)
+        Using reader As New StreamReader(_stream, _encoding)
             Dim line As String = Nothing
             Do
                 line = reader.ReadLine()
