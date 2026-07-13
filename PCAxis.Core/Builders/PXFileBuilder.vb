@@ -1,3 +1,5 @@
+Imports PCAxis.Paxiom.Parsers
+
 Namespace PCAxis.Paxiom
 
     Public Class PXFileBuilder
@@ -10,6 +12,17 @@ Namespace PCAxis.Paxiom
         Private _host As PCAxis.PlugIn.IPlugInHost
         Private _originalGroupedVariables As Dictionary(Of String, Variable)
         Private _groupingIncludes As Dictionary(Of String, GroupingIncludesType)
+        Private m_parserFactory As IPXFileParserFactory
+
+        Public Sub New()
+            m_parserFactory = New PXFileParserFactory()
+        End Sub
+
+        Public Sub New(ByVal parserFactory As IPXFileParserFactory)
+            m_parserFactory = parserFactory
+        End Sub
+
+
         'Private _groupingInclude As GroupingIncludesType
 #End Region
 
@@ -25,11 +38,11 @@ Namespace PCAxis.Paxiom
 
             m_path = path
 
-            Dim plugin As PCAxis.PlugIn.IPlugIn
-            plugin = New PCAxis.Paxiom.Parsers.PXFileParser
+            Dim parser As PXFileParser
+            parser = m_parserFactory.Create()
 
-            DirectCast(plugin, PCAxis.Paxiom.Parsers.PXFileParser).SetPath(path.ToString())
-            m_parser = DirectCast(plugin, PCAxis.Paxiom.Parsers.PXFileParser)
+            parser.SetPath(path.ToString())
+            m_parser = parser
 
         End Sub
 
@@ -85,7 +98,7 @@ Namespace PCAxis.Paxiom
                 Me.Errors.Add(New BuilderMessage(ex.Message))
                 Return False
             End Try
-            
+
 
             Me.m_model.Meta.MainTable = m_path
 
@@ -464,15 +477,15 @@ Namespace PCAxis.Paxiom
         End Function
 
 
-         ''' <summary>
+        ''' <summary>
         ''' Substitutes variables in variables collection
         ''' </summary>
         ''' <param name="variables">The variable collection</param>
         ''' <param name="oldVar">The old variable in the collection that will be replaced</param>
         ''' <param name="newVar">The new variable</param>
         ''' <remarks></remarks>
-        Private Sub SubstituteVariables(ByVal variables As Variables, _
-                                        ByVal oldVar As Variable, _
+        Private Sub SubstituteVariables(ByVal variables As Variables,
+                                        ByVal oldVar As Variable,
                                         ByVal newVar As Variable)
             Dim index As Integer
 
@@ -516,29 +529,29 @@ Namespace PCAxis.Paxiom
 
 #Region "Plugin implementation"
 
-        Public ReadOnly Property Description() As String Implements plugin.IPlugIn.Description
+        Public ReadOnly Property Description() As String Implements PlugIn.IPlugIn.Description
             Get
                 Return "Model builder from the PX-file format"
             End Get
         End Property
 
-        Public ReadOnly Property Id() As System.Guid Implements plugin.IPlugIn.Id
+        Public ReadOnly Property Id() As System.Guid Implements PlugIn.IPlugIn.Id
             Get
                 Return New Guid("B8ACBF13-4512-48a0-981B-B55A25A46E80")
             End Get
         End Property
 
-        Public Sub Initialize(ByVal host As PlugIn.IPlugInHost, ByVal configuration As System.Collections.Generic.Dictionary(Of String, String)) Implements plugin.IPlugIn.Initialize
+        Public Sub Initialize(ByVal host As PlugIn.IPlugInHost, ByVal configuration As System.Collections.Generic.Dictionary(Of String, String)) Implements PlugIn.IPlugIn.Initialize
             _host = host
         End Sub
 
-        Public ReadOnly Property Name() As String Implements plugin.IPlugIn.Name
+        Public ReadOnly Property Name() As String Implements PlugIn.IPlugIn.Name
             Get
                 Return "PXFileBuilder"
             End Get
         End Property
 
-        Public Sub Terminate() Implements plugin.IPlugIn.Terminate
+        Public Sub Terminate() Implements PlugIn.IPlugIn.Terminate
 
         End Sub
 

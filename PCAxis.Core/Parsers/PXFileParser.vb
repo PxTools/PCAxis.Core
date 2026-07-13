@@ -1,5 +1,7 @@
 'TODO Move to plugin.core
 
+Imports System.IO
+
 Namespace PCAxis.Paxiom.Parsers
 
     Public Class PXFileParser
@@ -42,7 +44,7 @@ Namespace PCAxis.Paxiom.Parsers
                 End Try
             End If
             Try
-                Me._encoding = GetEncoding(path)
+                Me._encoding = Me.GetEncoding()
             Catch ex As Exception
                 Me._encoding = System.Text.Encoding.Default
             End Try
@@ -52,36 +54,58 @@ Namespace PCAxis.Paxiom.Parsers
             Me.state = ParserState.ReadKeyword
         End Sub
 
-        Public Shared Function GetEncoding(ByVal path As String) As System.Text.Encoding
+        Public Function GetEncoding() As System.Text.Encoding
+            Dim encoding As System.Text.Encoding = GetEncodingFromCodePage(GetStream())
 
-            If System.IO.Path.GetExtension(path).ToLower.Equals(".px") Then
-                Using tr As System.IO.TextReader = New System.IO.StreamReader(path)
-                    Dim lineCount = 1
-                    Dim nextLine As String = tr.ReadLine()
-
-                    While lineCount <= 100 And nextLine IsNot Nothing And Not nextLine.ToUpper().StartsWith("DATA=")
-                        If nextLine.ToUpper().StartsWith("CODEPAGE=") Then
-                            nextLine = nextLine.Substring(nextLine.IndexOf("""") + 1)
-                            nextLine = nextLine.Substring(0, nextLine.LastIndexOf(""""))
-                            Return System.Text.Encoding.GetEncoding(nextLine)
-                        End If
-
-                        lineCount += 1
-                        nextLine = tr.ReadLine()
-                    End While
-                End Using
+            If encoding Is Nothing Then
+                GetEncodingFromUde(GetStream, 16000)
             End If
 
+            Return encoding
+        End Function
+
+        Public Shared Function GetEncoding(ByVal path As String) As System.Text.Encoding
+            Dim encoding As System.Text.Encoding = GetEncodingFromCodePage(New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
+
+            If encoding Is Nothing Then
+                GetEncodingFromUde(New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read), Convert.ToInt32(New System.IO.FileInfo(path).Length))
+            End If
+
+            Return encoding
+        End Function
+
+
+        Private Shared Function GetEncodingFromCodePage(stream As System.IO.Stream) As System.Text.Encoding
+
+            Using tr As System.IO.TextReader = New System.IO.StreamReader(stream)
+                Dim lineCount = 1
+                Dim nextLine As String = tr.ReadLine()
+
+                While lineCount <= 100 And nextLine IsNot Nothing And Not nextLine.ToUpper().StartsWith("DATA=")
+                    If nextLine.ToUpper().StartsWith("CODEPAGE=") Then
+                        nextLine = nextLine.Substring(nextLine.IndexOf("""") + 1)
+                        nextLine = nextLine.Substring(0, nextLine.LastIndexOf(""""))
+                        Return System.Text.Encoding.GetEncoding(nextLine)
+                    End If
+
+                    lineCount += 1
+                    nextLine = tr.ReadLine()
+                End While
+            End Using
+
+            Return Nothing
+        End Function
+
+        Private Shared Function GetEncodingFromUde(stream As System.IO.Stream, length As Integer) As System.Text.Encoding
             Dim cs As String
 
             Dim BUFFER_SIZE As Integer = 1024
             Dim buffer(BUFFER_SIZE - 1) As Byte
             Dim size As Integer
-            Using fs As System.IO.FileStream = System.IO.File.OpenRead(path)
+            Using fs As System.IO.FileStream = stream
                 Dim det As Ude.ICharsetDetector
                 det = New Ude.CharsetDetector
-                Dim fi As New System.IO.FileInfo(path)
-                size = Math.Min(BUFFER_SIZE, Convert.ToInt32(fi.Length))
+                size = Math.Min(BUFFER_SIZE, length)
                 size = fs.Read(buffer, 0, size)
                 det.Feed(buffer, 0, size)
                 det.DataEnd()
@@ -471,6 +495,11 @@ Namespace PCAxis.Paxiom.Parsers
 
 #End Region
 
+
+        Protected Overridable Function GetStream() As Stream
+            Return New System.IO.FileStream(_path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read, 2048)
+        End Function
+
         Private Sub FastForward(ByVal s As System.IO.StreamReader, ByVal charCount As Long)
 
             For index As Long = 1 To charCount
@@ -497,7 +526,7 @@ Namespace PCAxis.Paxiom.Parsers
                 Exit Sub 'Data has aready been read.
             End If
 
-            Me.theStream = New IO.StreamReader(New System.IO.FileStream(_path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read, 2048), _encoding)
+            Me.theStream = New IO.StreamReader(GetStream(), _encoding)
             'theStream.BaseStream.Seek(_position, IO.SeekOrigin.Begin)
             'theStream.DiscardBufferedData()
             FastForward(theStream, _position)
