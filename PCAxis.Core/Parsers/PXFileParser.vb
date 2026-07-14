@@ -191,7 +191,7 @@ Namespace PCAxis.Paxiom.Parsers
                  "This object has been disposed.")
             End If
 
-            Me.theStream = New IO.StreamReader(New System.IO.FileStream(_path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read, 2048), _encoding)
+            Me.theStream = New IO.StreamReader(GetStream(), _encoding)
 
             Dim keyword As String = Nothing
             Dim language As String = Nothing
