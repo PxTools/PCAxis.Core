@@ -1,5 +1,6 @@
 using PCAxis.Paxiom.Parsers;
 using System.IO;
+using System.Text;
 
 namespace PCAxis.Core.Tests;
 
@@ -25,12 +26,13 @@ public class PXFileParserTests
     public void GetEncoding_ShouldReadAliasFile()
     {
         // Arrange
-        var fixturePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Test_files", "Alias_en.txt"));
+        var fixturePath = Path.Combine(AppContext.BaseDirectory, "Test_files", "Alias_en.txt");
 
         // Act
         var encoding = PXFileParser.GetEncoding(fixturePath);
 
         // Assert
         Assert.IsNotNull(encoding);
+        Assert.AreEqual(Encoding.Default, encoding);
     }
 }
