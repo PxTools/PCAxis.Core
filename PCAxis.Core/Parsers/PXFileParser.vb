@@ -58,7 +58,7 @@ Namespace PCAxis.Paxiom.Parsers
             Dim encoding As System.Text.Encoding = GetEncodingFromCodePage(GetStream())
 
             If encoding Is Nothing Then
-                GetEncodingFromUde(GetStream, 16000)
+                encoding = GetEncodingFromUde(GetStream, 16000)
             End If
 
             Return encoding
@@ -68,7 +68,7 @@ Namespace PCAxis.Paxiom.Parsers
             Dim encoding As System.Text.Encoding = GetEncodingFromCodePage(New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
 
             If encoding Is Nothing Then
-                GetEncodingFromUde(New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read), Convert.ToInt32(New System.IO.FileInfo(path).Length))
+                encoding = GetEncodingFromUde(New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read), Convert.ToInt32(New System.IO.FileInfo(path).Length))
             End If
 
             Return encoding
@@ -81,7 +81,7 @@ Namespace PCAxis.Paxiom.Parsers
                 Dim lineCount = 1
                 Dim nextLine As String = tr.ReadLine()
 
-                While lineCount <= 100 And nextLine IsNot Nothing And Not nextLine.ToUpper().StartsWith("DATA=")
+                While lineCount <= 100 AndAlso nextLine IsNot Nothing AndAlso Not nextLine.ToUpper().StartsWith("DATA=")
                     If nextLine.ToUpper().StartsWith("CODEPAGE=") Then
                         nextLine = nextLine.Substring(nextLine.IndexOf("""") + 1)
                         nextLine = nextLine.Substring(0, nextLine.LastIndexOf(""""))
