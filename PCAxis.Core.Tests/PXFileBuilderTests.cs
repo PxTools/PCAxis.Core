@@ -29,4 +29,30 @@ public class PXFileBuilderTests
         }
 
     }
+
+    [TestMethod]
+    public void BuildForSelection_should_preserve_encoding()
+    {
+        // Arrange
+        var fixturePath = Path.Combine(AppContext.BaseDirectory, "Test_files", "TAB003.px");
+        
+        // Act
+        // The fixture declares CODEPAGE="iso-8859-1".
+        var builder = new PXFileBuilder();
+        builder.SetPath(fixturePath);
+            
+        var result = builder.BuildForSelection();
+
+        // Assert
+        Assert.IsTrue(result, "BuildForSelection should succeed.");
+
+        var title = builder.Model.Meta.Title;
+
+        StringAssert.Contains(
+            title,
+            "efter behandlingstyp");
+
+        StringAssert.Contains(title, "år");
+        
+    }
 }
