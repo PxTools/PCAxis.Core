@@ -16,12 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Test_files\Alias_en.txt" />
+    <None Remove="Test_files\**\*" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Test_files\Alias_en.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Test_files\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
