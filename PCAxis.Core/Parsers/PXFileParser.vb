@@ -43,14 +43,15 @@ Namespace PCAxis.Paxiom.Parsers
                     Logger.Error("", ex)
                 End Try
             End If
+
+            _path = path
+
             Try
                 Me._encoding = Me.GetEncoding()
             Catch ex As Exception
                 Me._encoding = System.Text.Encoding.Default
             End Try
 
-            _path = path
-            'Me.theStream = New IO.StreamReader(New System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read, 2048), _encoding)
             Me.state = ParserState.ReadKeyword
         End Sub
 
