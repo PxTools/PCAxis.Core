@@ -19,6 +19,7 @@ Namespace PCAxis.Paxiom
             mUnits = New String(0) {}
             mAlternativeText = New String(0) {}
             mBaseperiod = New String(0) {}
+            mRefPeriod = New String(0) {}
             mContact(0) = ""
             mContactInfo = New List(Of Contact)(0) {}
         End Sub
@@ -33,6 +34,7 @@ Namespace PCAxis.Paxiom
             mUnits = New String(internalBufferSize) {}
             mAlternativeText = New String(internalBufferSize) {}
             mBaseperiod = New String(internalBufferSize) {}
+            mRefPeriod = New String(internalBufferSize) {}
             mContactInfo = New List(Of Contact)(internalBufferSize) {}
         End Sub
 
@@ -50,6 +52,7 @@ Namespace PCAxis.Paxiom
             ci.mContact = New String(numberOfLanguages - 1) {}
             ci.mUnits = New String(numberOfLanguages - 1) {}
             ci.mBaseperiod = New String(numberOfLanguages - 1) {}
+            ci.mRefPeriod = New String(numberOfLanguages - 1) {}
 
             If Me.mContact.Count() = ci.mContact.Count() AndAlso Me.mContact.Count() = numberOfLanguages Then
                 For i As Integer = 0 To numberOfLanguages - 1
@@ -58,6 +61,7 @@ Namespace PCAxis.Paxiom
                     ci.mAlternativeText(i) = Me.mAlternativeText(i)
                     ci.mContactInfo(i) = Me.mContactInfo(i)
                     ci.mBaseperiod(i) = Me.mBaseperiod(i)
+                    ci.mRefPeriod(i) = Me.mRefPeriod(i)
                 Next
             End If
 
@@ -92,7 +96,8 @@ Namespace PCAxis.Paxiom
         <LanguageDependent()>
         Private mContactInfo() As List(Of Contact)
         Private mLastUpdated As String
-        Private mRefPeriod As String
+        <LanguageDependent()>
+        Private mRefPeriod() As String
         Private mSeasAdj As String
         Private mDayAdj As String
         Private mStockFa As String
@@ -212,10 +217,10 @@ Namespace PCAxis.Paxiom
         ''' <remarks></remarks>
         Public Property RefPeriod() As String
             Get
-                Return Me.mRefPeriod
+                Return Me.mRefPeriod(mLanguageIndex)
             End Get
             Set(ByVal value As String)
-                Me.mRefPeriod = value
+                Me.mRefPeriod(mLanguageIndex) = value
             End Set
         End Property
 
@@ -351,7 +356,7 @@ Namespace PCAxis.Paxiom
                 Case PXKeywords.LAST_UPDATED
                     Me.mLastUpdated = value
                 Case PXKeywords.REFPERIOD
-                    Me.mRefPeriod = value
+                    Me.mRefPeriod(languageIndex) = value
                 Case PXKeywords.SEASADJ
                     Me.mSeasAdj = value
                 Case PXKeywords.DAYADJ
@@ -448,7 +453,7 @@ Namespace PCAxis.Paxiom
             mBaseperiod = CType(info.GetValue("Baseperiod", GetType(String())), String())
             mCFPrices = info.GetString("mCFPrices")
             mLastUpdated = info.GetString("mLastUpdated")
-            mRefPeriod = info.GetString("mRefPeriod")
+            mRefPeriod = CType(info.GetValue("mRefPeriod", GetType(String())), String())
             mSeasAdj = info.GetString("mSeasAdj")
             mDayAdj = info.GetString("mDayAdj")
             mStockFa = info.GetString("mStockFa")
